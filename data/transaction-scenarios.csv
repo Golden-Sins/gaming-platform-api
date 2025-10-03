@@ -1,0 +1,9 @@
+scenario,playerId,gameId,betAmount,currency,expectedResult,description
+normal_bet,player_alpha_123,cosmic_fortune_spin,1.00,EUR,success,Standard bet processing
+high_roller_bet,player_beta_456,elite_card_master,50.00,USD,success,High value bet
+minimum_bet,player_alpha_123,lucky_sevens_classic,0.01,EUR,success,Minimum bet amount
+insufficient_funds,player_gamma_789,royal_blackjack_pro,999999.99,GBP,insufficient_funds,Balance too low
+invalid_currency,player_alpha_123,cosmic_fortune_spin,1.00,INVALID,validation_error,Unsupported currency
+negative_amount,player_beta_456,dragon_fire_quest,-1.00,USD,validation_error,Negative bet amount
+zero_amount,player_delta_555,mystic_wheel_fortune,0.00,EUR,validation_error,Zero bet amount test
+exceeded_max_bet,player_epsilon_321,thunder_strike_slots,10000.00,SEK,max_bet_exceeded,Bet exceeds maximum

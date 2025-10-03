@@ -1,0 +1,7 @@
+operatorId,operatorSecret,expectedResult,scenario,description
+starlight_gaming_demo,secret_star_2024,success,valid_credentials,Standard operator login
+nexus_premium_ops,premium_nex_456,success,premium_account,Premium operator with extended features
+starlight_gaming_demo,wrong_secret_123,error,invalid_credentials,Testing wrong password
+unknown_operator_xyz,any_secret_999,error,unknown_operator,Testing non-existent operator
+galaxy_casino_ops,galaxy_secret_789,success,valid_credentials,Multi-brand operator login
+cosmic_bet_operator,cosmic_pass_321,success,valid_credentials,International operator login

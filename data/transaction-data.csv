@@ -1,0 +1,11 @@
+playerId,gameId,transactionType,amount,currency,expectedBalance,scenario,description
+player_alpha_123,cosmic_fortune_spin,bet,0.50,EUR,100.00,normal_bet,Standard slot bet
+player_alpha_123,cosmic_fortune_spin,win,2.50,EUR,102.50,small_win,Small winning spin
+player_beta_456,elite_card_master,bet,10.00,USD,240.00,high_bet,High stakes card game
+player_gamma_789,royal_blackjack_pro,bet,50.00,GBP,0.25,insufficient_balance,Testing insufficient funds
+player_alpha_123,lucky_sevens_classic,bet,0.10,EUR,9.90,min_bet,Minimum bet test
+player_delta_555,dragon_fire_quest,bet,5.00,USD,495.00,medium_bet,Medium volatility bet
+player_delta_555,dragon_fire_quest,win,25.00,USD,520.00,big_win,Large winning round
+player_epsilon_321,mystic_wheel_fortune,bet,1.00,EUR,74.00,bonus_trigger,Bonus round triggered
+player_epsilon_321,mystic_wheel_fortune,win,15.00,EUR,89.00,bonus_win,Bonus round payout
+player_zeta_777,thunder_strike_slots,bet,10.00,SEK,990.00,nordic_bet,Nordic market transactione_theme

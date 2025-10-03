@@ -1,0 +1,9 @@
+gameId,operatorId,playerId,currency,initialBalance,betAmount,gameType,scenario
+cosmic_fortune_spin,starlight_gaming_demo,player_alpha_123,EUR,100.50,0.20,slot,normal_launch
+elite_card_master,starlight_gaming_demo,player_beta_456,USD,250.00,5.00,table,high_roller
+royal_blackjack_pro,nexus_premium_ops,player_gamma_789,GBP,50.25,1.00,live,standard_player
+lucky_sevens_classic,starlight_gaming_demo,player_alpha_123,EUR,10.00,0.10,slot,low_balance
+dragon_fire_quest,nexus_premium_ops,player_delta_555,USD,500.00,2.00,slot,premium_player
+mystic_wheel_fortune,galaxy_casino_ops,player_epsilon_321,EUR,75.00,0.50,slot,bonus_feature_test
+thunder_strike_slots,starlight_gaming_demo,player_zeta_777,SEK,1000.00,10.00,slot,nordic_market
+ocean_depths_adventure,nexus_premium_ops,player_beta_456,USD,300.00,1.50,slot,adventure_theme

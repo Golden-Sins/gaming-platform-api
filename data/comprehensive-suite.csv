@@ -1,0 +1,10 @@
+test_type,operator_id,game_id,player_id,currency,bet_amount,expected_result,scenario_description
+authentication,starlight_gaming_demo,,,EUR,,success,Standard operator login
+authentication,nexus_premium_ops,,,USD,,success,Premium operator login
+authentication,unknown_operator_xyz,,,EUR,,authentication_failed,Invalid operator test
+game_launch,starlight_gaming_demo,cosmic_fortune_spin,player_alpha_123,EUR,,success,Popular slot launch
+game_launch,nexus_premium_ops,dragon_fire_quest,player_beta_456,USD,,success,Premium game launch
+game_launch,starlight_gaming_demo,elite_card_master,player_gamma_789,GBP,,game_restricted,Restricted game access
+transaction,starlight_gaming_demo,cosmic_fortune_spin,player_alpha_123,EUR,1.00,success,Standard bet processing
+transaction,nexus_premium_ops,diamond_rush_extreme,player_delta_555,USD,25.00,success,High roller bet
+transaction,starlight_gaming_demo,lucky_sevens_classic,player_alpha_123,EUR,999999.99,insufficient_funds,Insufficient funds test

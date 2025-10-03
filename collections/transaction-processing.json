@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "8ff8a1ce-cf10-4d8a-b184-d6bb3047afc2",
+		"name": "Gaming Platform - Transactions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48404358",
+		"_collection_link": "https://valtersupenieks-4604138.postman.co/workspace/Gaming-Authentication-Flow~0622817b-4e06-4fbb-93ae-b317985ceed1/collection/48404358-8ff8a1ce-cf10-4d8a-b184-d6bb3047afc2?action=share&source=collection_link&creator=48404358"
+	},
+	"item": [
+		{
+			"name": "Place Bet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Bet request successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Bet payload correct\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.playerId).to.equal(pm.environment.get(\"playerId\"));\r",
+							"    pm.expect(jsonData.data.gameId).to.equal(pm.environment.get(\"gameId\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Bet amount in request\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.betAmount).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Transaction processing time under 1 second\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Save transaction ID\r",
+							"pm.environment.set(\"lastTransactionId\", \"txn_\" + pm.variables.replaceIn('{{$randomUUID}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"playerId\": \"{{playerId}}\",\r\n  \"gameId\": \"{{gameId}}\",\r\n  \"sessionId\": \"{{sessionId}}\",\r\n  \"betAmount\": {{betAmount}},\r\n  \"currency\": \"{{currency}}\",\r\n  \"roundId\": \"{{$randomUUID}}\",\r\n  \"transactionId\": \"bet_{{$randomUUID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process Win",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Win request successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Win amount in payload\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.winAmount).to.equal(5.00);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Related transaction ID present\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.relatedTransactionId).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"playerId\": \"{{playerId}}\",\r\n  \"gameId\": \"{{gameId}}\",\r\n  \"sessionId\": \"{{sessionId}}\",\r\n  \"winAmount\": 5.00,\r\n  \"currency\": \"{{currency}}\",\r\n  \"roundId\": \"{{$randomUUID}}\",\r\n  \"transactionId\": \"win_{{$randomUUID}}\",\r\n  \"relatedTransactionId\": \"{{lastTransactionId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Player Balance",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/get?playerId={{playerId}}&currency={{currency}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "playerId",
+							"value": "{{playerId}}"
+						},
+						{
+							"key": "currency",
+							"value": "{{currency}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transaction History",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Transaction history request successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Query parameters correct\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.args.playerId).to.equal(pm.environment.get(\"playerId\"));\r",
+							"    pm.expect(jsonData.args.gameId).to.equal(pm.environment.get(\"gameId\"));\r",
+							"    pm.expect(jsonData.args.limit).to.equal(\"50\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/get?playerId={{playerId}}&gameId={{gameId}}&limit=50",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "playerId",
+							"value": "{{playerId}}"
+						},
+						{
+							"key": "gameId",
+							"value": "{{gameId}}"
+						},
+						{
+							"key": "limit",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

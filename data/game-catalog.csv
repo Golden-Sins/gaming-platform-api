@@ -1,0 +1,13 @@
+gameId,gameName,gameType,operatorId,playerId,currency,mode,expectedResult,scenario
+cosmic_fortune_spin,Cosmic Fortune Spin,slot,starlight_gaming_demo,player_alpha_123,EUR,real,success,Popular slot game
+dragon_fire_quest,Dragon Fire Quest,slot,nexus_premium_ops,player_beta_456,USD,real,success,Premium game
+elite_card_master,Elite Card Master,table,starlight_gaming_demo,player_gamma_789,GBP,real,restricted,Demo operator restricted from table games
+lucky_sevens_classic,Lucky Sevens Classic,slot,starlight_gaming_demo,player_alpha_123,EUR,demo,success,Demo mode testing
+mystic_wheel_fortune,Mystic Wheel Fortune,slot,galaxy_casino_ops,player_delta_555,EUR,real,success,Bonus wheel feature game
+thunder_strike_slots,Thunder Strike Slots,slot,starlight_gaming_demo,player_epsilon_321,SEK,real,success,Nordic market game
+ocean_depths_adventure,Ocean Depths Adventure,slot,nexus_premium_ops,player_beta_456,USD,real,success,Adventure themed slot
+royal_blackjack_pro,Royal Blackjack Pro,table,nexus_premium_ops,player_gamma_789,GBP,real,success,Premium table game
+mega_jackpot_mania,Mega Jackpot Mania,slot,cosmic_bet_operator,player_zeta_777,EUR,real,success,Progressive jackpot slot
+crystal_cascade_wins,Crystal Cascade Wins,slot,starlight_gaming_demo,player_theta_999,EUR,real,success,Cascade mechanics
+invalid_game_test,Invalid Game Test,slot,starlight_gaming_demo,player_alpha_123,EUR,real,game_not_found,Non-existent game testing
+maintenance_game_xyz,Under Maintenance,slot,starlight_gaming_demo,player_beta_456,EUR,real,temporarily_unavailable,Maintenance scenario

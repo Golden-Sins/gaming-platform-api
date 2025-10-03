@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "9457a66c-0929-4b5e-b0ec-867e45ea92d9",
+		"name": "Gaming Platform - Game Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48404358",
+		"_collection_link": "https://valtersupenieks-4604138.postman.co/workspace/Gaming-Authentication-Flow~0622817b-4e06-4fbb-93ae-b317985ceed1/collection/48404358-9457a66c-0929-4b5e-b0ec-867e45ea92d9?action=share&source=collection_link&creator=48404358"
+	},
+	"item": [
+		{
+			"name": "Get Game Catalog",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Game catalog request successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Query parameters included\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.args).to.have.property('operatorId');\r",
+							"    pm.expect(jsonData.args).to.have.property('category');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/get?operatorId={{operatorId}}&category=slot&limit=50",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "operatorId",
+							"value": "{{operatorId}}"
+						},
+						{
+							"key": "category",
+							"value": "slot"
+						},
+						{
+							"key": "limit",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Launch Game",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Game launch request successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Game launch payload contains required fields\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.have.property('gameId');\r",
+							"    pm.expect(jsonData.data).to.have.property('playerId');\r",
+							"    pm.expect(jsonData.data).to.have.property('operatorId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Authorization header present\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.headers.authorization).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(10000); // 10 seconds\r",
+							"});\r",
+							"\r",
+							"// Store session ID for future tests\r",
+							"pm.environment.set(\"sessionId\", \"session_\" + pm.variables.replaceIn('{{$randomUUID}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"gameId\": \"{{gameId}}\",\r\n  \"playerId\": \"{{playerId}}\",\r\n  \"operatorId\": \"{{operatorId}}\",\r\n  \"currency\": \"{{currency}}\",\r\n  \"mode\": \"real\",\r\n  \"returnUrl\": \"https://operator-site.com/lobby\",\r\n  \"language\": \"en\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Session Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000); // 5 seconds\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Session ID in query params\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.args.sessionId).to.equal(pm.environment.get(\"sessionId\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Authorization header present\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.headers.authorization).to.exist;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/get?sessionId={{sessionId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "sessionId",
+							"value": "{{sessionId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Close Game Session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Session close request successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Session ID sent correctly\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.sessionId).to.equal(pm.environment.get(\"sessionId\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"sessionId\": \"{{sessionId}}\",\r\n  \"playerId\": \"{{playerId}}\",\r\n  \"reason\": \"player_exit\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

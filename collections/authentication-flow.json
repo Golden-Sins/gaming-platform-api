@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "72489f2d-74d3-4e53-ab28-fd7b711f312d",
+		"name": "authentication-flow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48404358",
+		"_collection_link": "https://valtersupenieks-4604138.postman.co/workspace/Gaming-Authentication-Flow~0622817b-4e06-4fbb-93ae-b317985ceed1/collection/48404358-72489f2d-74d3-4e53-ab28-fd7b711f312d?action=share&source=collection_link&creator=48404358"
+	},
+	"item": [
+		{
+			"name": "Operator Login - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains request data\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('data');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request body contains operator ID\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.have.property('operatorId');\r",
+							"    pm.expect(jsonData.data.operatorId).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"// Store mock auth token for subsequent requests\r",
+							"pm.environment.set(\"authToken\", \"mock_token_\" + pm.variables.replaceIn('{{$randomUUID}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"operatorId\": \"{{operatorId}}\",\r\n  \"operatorSecret\": \"{{operatorSecret}}\",\r\n  \"loginType\": \"api_integration\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token Validation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Token validation successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Authorization header sent\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.headers.authorization).to.exist;\r",
+							"    pm.expect(jsonData.headers.authorization).to.include(\"Bearer\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/get",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Operator Login - Invalid Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request sent successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Invalid credentials in request body\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.operatorId).to.equal(\"unknown_operator_xyz\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time under 2 seconds\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"operatorId\": \"unknown_operator_xyz\",\r\n  \"operatorSecret\": \"wrong_secret_123\",\r\n  \"loginType\": \"api_integration\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Operator Login - Premium Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Premium operator login successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Premium operator ID in request\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.operatorId).to.equal(\"nexus_premium_ops\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"operatorId\": \"nexus_premium_ops\",\r\n  \"operatorSecret\": \"premium_nex_456\",\r\n  \"loginType\": \"api_integration\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
