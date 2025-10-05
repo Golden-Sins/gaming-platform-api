@@ -1,22 +1,22 @@
 {
-	"id": "c6535c5a-b154-4f51-a3f9-ed698e07ffcd",
-	"name": "Staging",
+	"id": "d937cb2e-ad66-45b3-a471-6b999c2fd4a2",
+	"name": "Development",
 	"values": [
 		{
 			"key": "baseUrl",
-			"value": "",
+			"value": "https://postman-echo.com",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "operatorId",
-			"value": "",
+			"value": "starlight_gaming_demo",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "operatorSecret",
-			"value": "",
+			"value": "secret_star_2024",
 			"type": "default",
 			"enabled": true
 		},
@@ -28,42 +28,42 @@
 		},
 		{
 			"key": "gameApiUrl",
-			"value": "",
+			"value": "{{baseUrl}}/games",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "transactionApiUrl",
-			"value": "",
+			"value": "{{baseUrl}}/transactions",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "playerId",
-			"value": "",
+			"value": "player_alpha_123",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "currency",
-			"value": "",
+			"value": "EUR",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "gameId",
-			"value": "",
+			"value": "cosmic_fortune_spin",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "betAmount",
-			"value": "",
+			"value": "1.00",
 			"type": "default",
 			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2025-10-01T12:54:22.917Z",
+	"_postman_exported_at": "2025-10-01T20:50:41.659Z",
 	"_postman_exported_using": "Postman/11.64.8-250927-0001"
 }

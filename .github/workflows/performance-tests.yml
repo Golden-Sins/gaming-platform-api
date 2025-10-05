@@ -1,0 +1,46 @@
+name: Performance Benchmarks
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 12 * * 1' # Every Monday at noon
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Newman
+      run: npm install -g newman
+    
+    - name: Create results directory
+      run: mkdir -p perf-results
+    
+    - name: Run Performance Tests
+      run: |
+        # Run tests multiple times to get average
+        for i in {1..10}; do
+          echo "Run $i of 10"
+          newman run collections/authentication-flow.json \
+            -e environments/development.json \
+            --iteration-count 1 \
+            --reporters json \
+            --reporter-json-export perf-results/run-$i.json
+        done
+    
+    - name: Analyze Performance
+      run: |
+        echo "Performance test completed - 10 runs"
+        echo "Results saved for analysis"
+    
+    - name: Upload Performance Data
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-results-${{ github.run_number }}
+        path: perf-results/

@@ -5,6 +5,7 @@
 > API testing suite for gaming platform integrations, built with Postman and Newman CLI.
 
 
+![API Tests](https://github.com/Golden-Sins/gaming-platform-api/actions/workflows/api-tests.yml/badge.svg)
 
 \[!\[Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge\&logo=postman\&logoColor=white)](https://www.postman.com/)
 
@@ -31,6 +32,8 @@ Comprehensive API testing framework demonstrating professional gaming integratio
 \- Professional HTML reporting
 
 \- Performance benchmarking
+
+> Comprehensive automated API testing framework with CI/CD integration
 
 
 

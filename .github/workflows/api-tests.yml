@@ -1,0 +1,69 @@
+name: Gaming API Tests - Multi Environment
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  test-development:
+    name: Test Development Environment
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-htmlextra
+    
+    - name: Create reports directory
+      run: mkdir -p reports
+    
+    - name: Run Dev Tests
+      run: |
+        newman run collections/authentication-flow.json \
+          -e environments/development.json \
+          --reporters htmlextra \
+          --reporter-htmlextra-export reports/dev-tests.html
+    
+    - name: Upload Dev Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: development-report
+        path: reports/
+  
+  test-staging:
+    name: Test Staging Environment
+    runs-on: ubuntu-latest
+    needs: test-development
+    
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-htmlextra
+    
+    - name: Create reports directory
+      run: mkdir -p reports
+    
+    - name: Run Staging Tests
+      run: |
+        newman run collections/authentication-flow.json \
+          -e environments/staging.json \
+          --reporters htmlextra \
+          --reporter-htmlextra-export reports/staging-tests.html
+    
+    - name: Upload Staging Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: staging-report
+        path: reports/

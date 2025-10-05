@@ -1,0 +1,54 @@
+name: Nightly Regression Tests
+
+on:
+  schedule:
+    # Run every night at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  full-regression:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-htmlextra
+    
+    - name: Create reports directory
+      run: mkdir -p reports
+    
+    - name: Run Full Test Suite
+      run: |
+        # Authentication Tests
+        newman run collections/authentication-flow.json \
+          -e environments/development.json \
+          -d data/authentication-data.csv \
+          --reporters htmlextra \
+          --reporter-htmlextra-export reports/auth-$(date +%Y%m%d).html
+        
+        # Game Tests
+        newman run collections/game-management.json \
+          -e environments/development.json \
+          -d data/game-catalog.csv \
+          --reporters htmlextra \
+          --reporter-htmlextra-export reports/games-$(date +%Y%m%d).html
+        
+        # Transaction Tests
+        newman run collections/transaction-processing.json \
+          -e environments/development.json \
+          -d data/transaction-data.csv \
+          --reporters htmlextra \
+          --reporter-htmlextra-export reports/transactions-$(date +%Y%m%d).html
+    
+    - name: Upload Nightly Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: nightly-regression-reports-${{ github.run_number }}
+        path: reports/
+        retention-days: 30
