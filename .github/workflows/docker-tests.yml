@@ -1,0 +1,41 @@
+name: Docker Container Tests
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 9 * * *'
+
+jobs:
+  docker-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t gaming-api-tests .
+      - name: Run tests in container
+        run: |
+          docker run --rm \
+            -v "${PWD}/reports:/app/reports" \
+            gaming-api-tests
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()  
+        with:
+          name: docker-test-reports-${{ github.run_number }}
+          path: reports/
+
+      - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:  
+          username: ${{ secrets.DOCKER_USERNAME }} 
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag gaming-api-tests goldyyy/gaming-api-tests:latest
+          docker push goldyyy/gaming-api-tests:latest  

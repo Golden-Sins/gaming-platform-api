@@ -1,0 +1,40 @@
+version: '3.8'  
+services:  
+  # Authentication Tests Container  
+  auth-tests:  
+    build: .  # Build using the current Dockerfile (project root)  
+    volumes:  
+      - ./reports:/app/reports  # Mount local reports directory to container  
+    command: >  
+      newman run collections/authentication-flow.json  
+      -e environments/development.json  
+      --reporters cli,htmlextra  
+      --reporter-htmlextra-export reports/auth-tests.html  
+
+  # Game Management Tests Container (depends on auth-tests)  
+  game-tests:  
+    build: .  
+    volumes:  
+      - ./reports:/app/reports  
+    command: >  
+      newman run collections/game-management.json  
+      -e environments/development.json  
+      -d data/game-launch-data.csv  
+      --reporters cli,htmlextra  
+      --reporter-htmlextra-export reports/game-tests.html  
+    depends_on:  
+      - auth-tests  # Run game-tests only after auth-tests completes  
+
+  # Transaction Tests Container (depends on game-tests)  
+  transaction-tests:  
+    build: .  
+    volumes:  
+      - ./reports:/app/reports  
+    command: >  
+      newman run collections/transaction-processing.json  
+      -e environments/development.json  
+      -d data/transaction-data.csv  
+      --reporters cli,htmlextra  
+      --reporter-htmlextra-export reports/transaction-tests.html  
+    depends_on:  
+      - game-tests  
