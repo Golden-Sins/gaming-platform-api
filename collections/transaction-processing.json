@@ -17,9 +17,11 @@
 							"// Set environment variables from CSV data for this iteration",
 							"if (pm.iterationData.has('playerId')) {",
 							"    pm.environment.set('playerId', pm.iterationData.get('playerId'));",
+							"    console.log('Setting playerId to:', pm.iterationData.get('playerId'));",
 							"}",
 							"if (pm.iterationData.has('gameId')) {",
 							"    pm.environment.set('gameId', pm.iterationData.get('gameId'));",
+							"    console.log('Setting gameId to:', pm.iterationData.get('gameId'));",
 							"}",
 							"if (pm.iterationData.has('amount')) {",
 							"    pm.environment.set('betAmount', pm.iterationData.get('amount'));",
@@ -43,6 +45,9 @@
 							"    const jsonData = pm.response.json();",
 							"    const expectedPlayerId = pm.environment.get(\"playerId\");",
 							"    const expectedGameId = pm.environment.get(\"gameId\");",
+							"    ",
+							"    console.log('Expected playerId:', expectedPlayerId, 'Actual:', jsonData.data.playerId);",
+							"    console.log('Expected gameId:', expectedGameId, 'Actual:', jsonData.data.gameId);",
 							"    ",
 							"    pm.expect(jsonData.data.playerId).to.equal(expectedPlayerId);",
 							"    pm.expect(jsonData.data.gameId).to.equal(expectedGameId);",
@@ -167,6 +172,26 @@
 		},
 		{
 			"name": "Get Player Balance",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Set environment variables from CSV data for this iteration",
+							"if (pm.iterationData.has('playerId')) {",
+							"    pm.environment.set('playerId', pm.iterationData.get('playerId'));",
+							"}",
+							"if (pm.iterationData.has('gameId')) {",
+							"    pm.environment.set('gameId', pm.iterationData.get('gameId'));",
+							"}",
+							"if (pm.iterationData.has('currency')) {",
+							"    pm.environment.set('currency', pm.iterationData.get('currency'));",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -205,6 +230,23 @@
 			"name": "Get Transaction History",
 			"event": [
 				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Set environment variables from CSV data for this iteration",
+							"if (pm.iterationData.has('playerId')) {",
+							"    pm.environment.set('playerId', pm.iterationData.get('playerId'));",
+							"    console.log('History - Setting playerId to:', pm.iterationData.get('playerId'));",
+							"}",
+							"if (pm.iterationData.has('gameId')) {",
+							"    pm.environment.set('gameId', pm.iterationData.get('gameId'));",
+							"    console.log('History - Setting gameId to:', pm.iterationData.get('gameId'));",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
 					"listen": "test",
 					"script": {
 						"exec": [
@@ -216,6 +258,9 @@
 							"    const jsonData = pm.response.json();",
 							"    const expectedPlayerId = pm.environment.get(\"playerId\");",
 							"    const expectedGameId = pm.environment.get(\"gameId\");",
+							"    ",
+							"    console.log('History - Expected playerId:', expectedPlayerId, 'Actual:', jsonData.args.playerId);",
+							"    console.log('History - Expected gameId:', expectedGameId, 'Actual:', jsonData.args.gameId);",
 							"    ",
 							"    pm.expect(jsonData.args.playerId).to.equal(expectedPlayerId);",
 							"    pm.expect(jsonData.args.gameId).to.equal(expectedGameId);",
@@ -271,6 +316,39 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Collection-level pre-request script",
+					"// This runs before EVERY request in the collection",
+					"",
+					"// Load data from CSV iteration",
+					"if (pm.iterationData.has('playerId')) {",
+					"    pm.environment.set('playerId', pm.iterationData.get('playerId'));",
+					"    console.log('[Collection] Setting playerId to:', pm.iterationData.get('playerId'));",
+					"}",
+					"",
+					"if (pm.iterationData.has('gameId')) {",
+					"    pm.environment.set('gameId', pm.iterationData.get('gameId'));",
+					"    console.log('[Collection] Setting gameId to:', pm.iterationData.get('gameId'));",
+					"}",
+					"",
+					"if (pm.iterationData.has('amount')) {",
+					"    pm.environment.set('betAmount', pm.iterationData.get('amount'));",
+					"    console.log('[Collection] Setting betAmount to:', pm.iterationData.get('amount'));",
+					"}",
+					"",
+					"if (pm.iterationData.has('currency')) {",
+					"    pm.environment.set('currency', pm.iterationData.get('currency'));",
+					"    console.log('[Collection] Setting currency to:', pm.iterationData.get('currency'));",
+					"}"
+				]
+			}
 		}
 	]
 }
