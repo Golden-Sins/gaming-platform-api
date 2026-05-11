@@ -130,6 +130,24 @@ Environment files store base URLs, API keys, and environment-specific variables.
 
 ---
 
+## 📊 Monitoring & Observability
+
+This project is instrumented with **Datadog** for real-time observability.
+
+**What's tracked:**
+- Test pass/fail counts per run
+- Total test duration (ms)
+- CPU and memory of the host machine
+
+**Setup:**
+- Datadog Agent installed and reporting system metrics
+- Newman results sent as custom metrics via `send_to_datadog.py` after each run
+- Live dashboard tracking test results over time
+- Monitor alert configured to fire when any test fails
+
+![Datadog Dashboard](docs/datadog-dashboard.png)
+
+
 ## 📊 Reports
 
 After each Newman run, an HTML report is generated at `docs/report.html`. It includes:
